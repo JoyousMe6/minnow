@@ -11,8 +11,30 @@ using namespace std;
 namespace {
 void get_URL( const string& host, const string& path )
 {
-  debug( "Function called: get_URL( \"{}\", \"{}\" )", host, path );
-  debug( "get_URL() function not yet implemented" );
+  string message1 = "GET " + path + " HTTP/1.1" + "\r\n";  // 注意空格
+  string message2 = "Host: " + host + "\r\n";
+  string message3 = "Connection: close\r\n";
+  string message4 = "\r\n";
+  // 注：这些消息格式是http协议的规范，这里不展开
+  string buf;
+  // 建立tcp连接
+  TCPSocket tcpSocket;                          // 创建客户端，注意不要用new
+  tcpSocket.connect( Address( host, "http" ) ); // 连接服务端
+  // 向字节流写入
+  tcpSocket.write( message1 + message2 + message3 + message4 );
+  tcpSocket.shutdown( SHUT_WR ); // 断开写入流（关闭写入接口），并不会关闭套接字
+  // 从字节流循环读取
+  while ( tcpSocket.eof() == false ) // 没到结尾
+  {
+    tcpSocket.read( buf ); // 将字节流读进buf
+    cout << buf;
+  }
+  // shutdown() 会等待输入缓冲区中的数据传输完成后再关闭连接
+  // close() 无论输入缓冲区中是否有数据都将立即关闭套接字
+  tcpSocket.close();
+  return;
+  // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
+  // cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
 } // namespace
 
