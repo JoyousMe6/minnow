@@ -19,12 +19,12 @@ void get_URL( const string& host, const string& path )
   sock.write( string_view( "Host: " + host + "\r\n" ) );
   sock.write( string_view( "Connection: close\r\n\r\n" ) );
 
+  string buffer;
   while ( not sock.eof() ) {
-    string buffer;
     sock.read( buffer );
     cout << buffer;
   }
-  sock.wait_until_closed();
+  sock.close();
 }
 } // namespace
 

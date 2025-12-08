@@ -23,6 +23,10 @@ public:
 
 protected:
   // 请将所有额外的状态添加到 ByteStream 这里，而不是添加到 Writer 和 Reader 接口中。
+  std::string stream_ {};
+  uint64_t bytesPopped_ {};
+  uint64_t bytesPushed_ {};
+  bool closed_ {};
   uint64_t capacity_;
   bool error_ {};
 };
