@@ -9,11 +9,15 @@ void Reassembler::insert(uint64_t first_index, string data, bool is_last_substri
 {
   // 尝试关闭流的内部函数，当所有字节已被写入且结束标志为 true 时关闭流
   const auto try_close = [&]() -> void {
-    if (end_check_ && count_bytes_pending() == 0) {
+    if (end_check_ && count_bytes_pending() == 0&& current_index>=end_index) {
       output_.writer().close();
     }
   };
 
+  if (is_last_substring){
+    end_index = first_index + data.size();
+  }
+  
   if (data.empty()) {
     // 如果是空字符串且是最后一个子串，确保流关闭并标记为完成
     end_check_ |= is_last_substring;
@@ -85,6 +89,7 @@ void Reassembler::insert(uint64_t first_index, string data, bool is_last_substri
   while (!buf_.empty() && buf_.begin()->first == writer().bytes_pushed()) {
     output_.writer().push(buf_.begin()->second); // 将已重组的字节推送到输出流
     total_pending_ -= buf_.begin()->second.size(); // 减少待处理字节数
+    current_index=buf_.begin()->first + buf_.begin()->second.size();
     buf_.erase(buf_.begin()); // 从缓冲区中删除已处理的字节
   }
 

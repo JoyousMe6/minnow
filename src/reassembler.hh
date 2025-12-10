@@ -8,7 +8,9 @@ class Reassembler
 public:
   // 构造 Reassembler 以便写入给定的 ByteStream。
   // 参数 output 是一个可变的 ByteStream 对象，用于存储重组后的字节流。
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler(ByteStream&& output) 
+    : output_(std::move(output)), buf_(), total_pending_(0), end_check_(false) {}
+
 
   /*
    * 插入一个新的子串以重新组装到 ByteStream 中。
@@ -44,4 +46,6 @@ private:
   std::map<uint64_t, std::string> buf_;         // 缓存已接收的子串，按索引排序
   uint64_t total_pending_ {};                  // 当前内部存储的字节总数
   bool end_check_ { false };                   // 标记流是否已结束（最后一个子串已处理）
+  uint64_t current_index = 0;
+  uint64_t end_index = 0;
 };
