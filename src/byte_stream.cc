@@ -11,8 +11,8 @@ void Writer::push( string data )
   if ( data.size() > available_capacity() ) {
     data = data.substr( 0, available_capacity() );
   }
-  stream_ += data;
-  bytes_pushed_ += data.size();
+  buf_ += data;
+  total_pushed_ += data.size();
 }
 
 // 表明流已到达末尾。不会再有任何数据被写入。
@@ -30,13 +30,13 @@ bool Writer::is_closed() const
 // 当前可以推入流中的字节数是多少？
 uint64_t Writer::available_capacity() const
 {
-  return capacity_ - stream_.size();
+  return capacity_ - buf_.size();
 }
 
 // 累计推入流中的总字节数
 uint64_t Writer::bytes_pushed() const
 {
-  return bytes_pushed_;
+  return total_pushed_;
 }
 
 // 查看（窥视）缓冲区中的下一组字节 — 理想情况下是尽可能多的字节。
@@ -44,7 +44,7 @@ uint64_t Writer::bytes_pushed() const
 // 可能会迫使调用者进行大量的额外工作。
 string_view Reader::peek() const
 {
-  return stream_;
+  return buf_;
 }
 
 // 从缓冲区中移除 `len` 个字节。
@@ -55,24 +55,24 @@ void Reader::pop( uint64_t len )
     return;
   }
 
-  stream_ = stream_.substr( len );
-  bytes_popped_ += len;
+  buf_ = buf_.substr( len );
+  total_popped_ += len;
 }
 
 // 流是否已完成（已关闭且已完全弹出）？
 bool Reader::is_finished() const
 {
-  return closed_ and stream_.empty();
+  return closed_ and buf_.empty();
 }
 
 // 当前缓冲（已推入但尚未弹出）的字节数
 uint64_t Reader::bytes_buffered() const
 {
-  return stream_.size();
+  return buf_.size();
 }
 
 // 累计从流中弹出的总字节数
 uint64_t Reader::bytes_popped() const
 {
-  return bytes_popped_;
+  return total_popped_;
 }
