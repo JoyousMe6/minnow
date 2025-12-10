@@ -8,8 +8,8 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   debug( "unimplemented insert({}, {}, {}) called", first_index, data, is_last_substring );
 }
 
-// How many bytes are stored in the Reassembler itself?
-// This function is for testing only; don't add extra state to support it.
+// Reassembler 内部存储了多少字节？
+// 此函数仅用于测试；不要添加额外的状态来支持它。
 uint64_t Reassembler::count_bytes_pending() const
 {
   debug( "unimplemented count_bytes_pending() called" );
