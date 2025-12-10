@@ -94,7 +94,7 @@ int main()
 
       test.execute( BytesPushed( 3 ) );
       test.execute( ReadAll( "abc" ) );
-      test.execute( IsFinished( false ) );
+      test.execute( IsFinished( true ) );
     }
 
     {
