@@ -7,19 +7,19 @@
 class TCPReceiver
 {
 public:
-  // Construct with given Reassembler
+  // 使用给定的 Reassembler 构造
   explicit TCPReceiver( Reassembler&& reassembler ) : reassembler_( std::move( reassembler ) ) {}
 
   /*
-   * The TCPReceiver receives TCPSenderMessages, inserting their payload into the Reassembler
-   * at the correct stream index.
+   * TCPReceiver 接收 TCPSenderMessage，将其有效载荷插入到 Reassembler
+   * 中的正确流索引。
    */
   void receive( TCPSenderMessage message );
 
-  // The TCPReceiver sends TCPReceiverMessages to the peer's TCPSender.
+  // TCPReceiver 向对等方的 TCPSender 发送 TCPReceiverMessage。
   TCPReceiverMessage send() const;
 
-  // Access the output
+  // 访问输出
   const Reassembler& reassembler() const { return reassembler_; }
   Reader& reader() { return reassembler_.reader(); }
   const Reader& reader() const { return reassembler_.reader(); }

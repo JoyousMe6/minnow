@@ -5,14 +5,14 @@ using namespace std;
 
 void TCPReceiver::receive( TCPSenderMessage message )
 {
-  // Your code here.
+  // 你的代码在这里实现。
   debug( "unimplemented receive() called" );
   (void)message;
 }
 
 TCPReceiverMessage TCPReceiver::send() const
 {
-  // Your code here.
+  // 你的代码在这里实现。
   debug( "unimplemented send() called" );
   return {};
 }

@@ -3,9 +3,9 @@
 #include <cstdint>
 
 /*
- * The Wrap32 type represents a 32-bit unsigned integer that:
- *    - starts at an arbitrary "zero point" (initial value), and
- *    - wraps back to zero when it reaches 2^32 - 1.
+ * Wrap32 类型表示一个 32 位无符号整数，它：
+ *    - 从一个任意的“零点”开始（初始值），并且
+ *    - 当它达到 2^32 - 1 时会回绕到零。
  */
 
 class Wrap32
@@ -13,15 +13,15 @@ class Wrap32
 public:
   explicit Wrap32( uint32_t raw_value ) : raw_value_( raw_value ) {}
 
-  /* Construct a Wrap32 given an absolute sequence number n and the zero point. */
+  /* 给定一个绝对序列号 n 和零点，构造一个 Wrap32 实例。 */
   static Wrap32 wrap( uint64_t n, Wrap32 zero_point );
 
   /*
-   * The unwrap method returns an absolute sequence number that wraps to this Wrap32, given the zero point
-   * and a "checkpoint": another absolute sequence number near the desired answer.
+   * unwrap 方法返回一个绝对序列号，该序列号会回绕到此 Wrap32，给定零点
+   * 和一个“检查点”：另一个接近目标答案的绝对序列号。
    *
-   * There are many possible absolute sequence numbers that all wrap to the same Wrap32.
-   * The unwrap method should return the one that is closest to the checkpoint.
+   * 有许多可能的绝对序列号，它们都回绕到相同的 Wrap32。
+   * unwrap 方法应该返回与检查点最接近的那个绝对序列号。
    */
   uint64_t unwrap( Wrap32 zero_point, uint64_t checkpoint ) const;
 
