@@ -5,18 +5,17 @@
 #include <optional>
 
 /*
- * The TCPReceiverMessage structure contains the information sent from a TCP receiver to its sender.
+ * TCPReceiverMessage 结构体包含 TCP 接收方发给发送方的信息。
  *
- * It contains three fields:
+ * 它包含三个字段：
  *
- * 1) The acknowledgment number (ackno): the *next* sequence number needed by the TCP Receiver.
- *    This is an optional field that is empty if the TCPReceiver hasn't yet received the Initial Sequence Number.
+ * 1) 确认号（ackno）：TCP 接收方需要的 *下一个* 序列号。
+ *    这是一个可选字段，如果 TCPReceiver 尚未接收到初始序列号，则该字段为空。
  *
- * 2) The window size. This is the number of sequence numbers that the TCP receiver is interested
- *    to receive, starting from the ackno if present. The maximum value is 65,535 (UINT16_MAX from
- *    the <cstdint> header).
+ * 2) 窗口大小。该值表示 TCP 接收方希望接收的序列号数量，从 ackno 开始（如果存在）。
+ *    最大值为 65,535（来自 <cstdint> 头文件中的 UINT16_MAX）。
  *
- * 3) The RST (reset) flag. If set, the stream has suffered an error and the connection should be aborted.
+ * 3) RST（复位）标志位。若设置，则字节流发生了错误，连接应当被中止。
  */
 
 struct TCPReceiverMessage

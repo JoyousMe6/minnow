@@ -5,21 +5,20 @@
 #include <string>
 
 /*
- * The TCPSenderMessage structure contains the information sent from a TCP sender to its receiver.
+ * TCPSenderMessage 结构体包含 TCP 发送方发给接收方的信息。
  *
- * It contains five fields:
+ * 它包含五个字段：
  *
- * 1) The sequence number (seqno) of the beginning of the segment. If the SYN flag is set, this is the
- *    sequence number of the SYN flag. Otherwise, it's the sequence number of the beginning of the payload.
+ * 1) 段起始位置的序列号（seqno）。如果设置了 SYN 标志位，那么这里是 SYN 标志位的序列号。
+ *    否则，这里是负载（payload）起始位置的序列号。
  *
- * 2) The SYN flag. If set, this segment is the beginning of the byte stream, and the seqno field
- *    contains the Initial Sequence Number (ISN) -- the zero point.
+ * 2) SYN 标志位。若设置，则该段是字节流的开始，seqno 字段包含初始序列号（ISN）——零点。
  *
- * 3) The payload: a substring (possibly empty) of the byte stream.
+ * 3) 负载（payload）：字节流的一个子串（可能为空）。
  *
- * 4) The FIN flag. If set, the payload represents the ending of the byte stream.
+ * 4) FIN 标志位。若设置，则该负载表示字节流的结束。
  *
- * 5) The RST (reset) flag. If set, the stream has suffered an error and the connection should be aborted.
+ * 5) RST（复位）标志位。若设置，则字节流发生了错误，连接应当被中止。
  */
 
 struct TCPSenderMessage
@@ -32,6 +31,6 @@ struct TCPSenderMessage
 
   bool RST {};
 
-  // How many sequence numbers does this segment use?
+  // 该段使用了多少个序列号？
   size_t sequence_length() const { return SYN + payload.size() + FIN; }
 };
