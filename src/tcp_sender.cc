@@ -4,14 +4,14 @@
 
 using namespace std;
 
-// How many sequence numbers are outstanding?
+// 当前有多少个序列号在飞行中？
 uint64_t TCPSender::sequence_numbers_in_flight() const
 {
   debug( "unimplemented sequence_numbers_in_flight() called" );
   return {};
 }
 
-// How many consecutive retransmissions have happened?
+// 当前有多少次连续重传？
 uint64_t TCPSender::consecutive_retransmissions() const
 {
   debug( "unimplemented consecutive_retransmissions() called" );
