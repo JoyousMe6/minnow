@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <queue>
 #include <string>
 #include <string_view>
-#include <deque>
 
 class Reader;
 class Writer;
@@ -28,8 +28,8 @@ public:
   bool has_error() const { return error_; };
 
 protected:
-  std::deque<std::string> stream_ {};
-  std::deque<std::string_view> stream_view_ {};
+  std::queue<std::string> stream_ {};
+  std::queue<std::string_view> stream_view_ {};
 
   uint64_t capacity_;         // 字节流的最大容量
   uint64_t total_popped_ {};  // 累计从流中读取的字节数
