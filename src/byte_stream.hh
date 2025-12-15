@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <deque>
 
 class Reader;
 class Writer;
@@ -27,12 +28,15 @@ public:
   bool has_error() const { return error_; };
 
 protected:
-  // 字节流的缓冲区，存储数据
-  std::string buf_ {};
+  std::deque<std::string> stream_ {};
+  std::deque<std::string_view> stream_view_ {};
+
+  uint64_t capacity_;         // 字节流的最大容量
   uint64_t total_popped_ {};  // 累计从流中读取的字节数
   uint64_t total_pushed_ {};  // 累计推入流中的字节数
+  uint64_t total_buffered_ {};
+
   bool closed_ {};            // 流是否已关闭
-  uint64_t capacity_;         // 字节流的最大容量
   bool error_ {};             // 流是否发生错误
 };
 
