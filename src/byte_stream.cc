@@ -19,12 +19,11 @@ void Writer::push( string data )
   if ( data.size() > Writer::available_capacity() ) {
     data.resize( Writer::available_capacity() );
   }
+  total_pushed_ += data.size();
+  total_buffered_ += data.size();
   
   stream_.emplace_back( move( data ) );
-  total_pushed_ += stream_.back().size();
-
   stream_view_.emplace_back( stream_.back() );
-  total_buffered_ += stream_view_.back().size();
 }
 
 // 标记流已经到达末尾，表示流不再接受任何数据的写入
@@ -61,20 +60,17 @@ string_view Reader::peek() const
 // 从缓冲区中移除指定数量的字节
 void Reader::pop( uint64_t len )
 {
-  while ( not stream_.empty() and len != 0 ) {
+  total_buffered_ -= len;
+  total_popped_ += len;
+  while ( len != 0 ) {
     const uint64_t size = stream_view_.front().size();
     if ( size > len ) {
       stream_view_.front().remove_prefix( len );
-      total_buffered_ -= len;
-      total_popped_ += len;
-      return; // with len = 0
-    } else {
-      stream_view_.pop_front();
-      total_buffered_ -= size;
-      stream_.pop_front();
-      total_popped_ += size;
-      len -= size;
+      break; // with len = 0
     }
+    stream_view_.pop_front();
+    stream_.pop_front();
+    len -= size;
   }
 }
 
