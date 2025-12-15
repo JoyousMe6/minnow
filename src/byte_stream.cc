@@ -23,7 +23,6 @@ void Writer::push( string data )
   total_buffered_ += data.size();
   
   stream_.emplace( move( data ) );
-  stream_view_.emplace( stream_.back() );
 }
 
 // 标记流已经到达末尾，表示流不再接受任何数据的写入
@@ -54,7 +53,8 @@ uint64_t Writer::bytes_pushed() const
 // 返回整个缓冲区的 string_view，但如果只返回一个字节可能会导致调用者做很多额外工作
 string_view Reader::peek() const
 {
-  return stream_view_.empty() ? string_view {} : stream_view_.front();
+  return stream_.empty() ? string_view {} // std::string_view dependents on the initializer through its lifetime.
+                         : string_view { stream_.front() }.substr( removed_prefix_ );
 }
 
 // 从缓冲区中移除指定数量的字节
@@ -62,14 +62,14 @@ void Reader::pop( uint64_t len )
 {
   total_buffered_ -= len;
   total_popped_ += len;
-  while ( len != 0 ) {
-    const uint64_t size = stream_view_.front().size();
-    if ( size > len ) {
-      stream_view_.front().remove_prefix( len );
-      break; // with len = 0
+  while ( len != 0U ) {
+    const auto size = stream_.front().size() - removed_prefix_;
+    if ( len < size ) {
+      removed_prefix_ += len;
+      break; // with len = 0;
     }
-    stream_view_.pop();
     stream_.pop();
+    removed_prefix_ = 0;
     len -= size;
   }
 }

@@ -29,7 +29,7 @@ public:
 
 protected:
   std::queue<std::string> stream_ {};
-  std::queue<std::string_view> stream_view_ {};
+  uint64_t removed_prefix_ {};
 
   uint64_t capacity_;         // 字节流的最大容量
   uint64_t total_popped_ {};  // 累计从流中读取的字节数
