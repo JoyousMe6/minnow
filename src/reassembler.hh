@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <map>
+#include <optional>
 
 class Reassembler
 {
@@ -45,8 +46,8 @@ private:
   ByteStream output_;                          // 用于存储重组后的字节流的 ByteStream
   std::map<uint64_t, std::string> buf_ {};         // 缓存已接收的子串，按索引排序
   uint64_t total_pending_ {};                  // 当前内部存储的字节总数
-  bool end_flag_ {};
+  std::optional<uint64_t> end_index_ {};
 
-  using mIterator = decltype(buf_)::iterator;
+  using mIterator = decltype( buf_ )::iterator;
   mIterator split( uint64_t pos );
 };
