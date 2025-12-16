@@ -9,8 +9,7 @@
 class Reassembler
 {
 public:
-  // 构造 Reassembler 以便写入给定的 ByteStream。
-  // 参数 output 是一个可变的 ByteStream 对象，用于存储重组后的字节流。
+  // 构造函数，接收一个 ByteStream 的右值引用，用于存储重组后的字节流
   explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
 
   /*
@@ -31,23 +30,22 @@ public:
    */
   void insert( uint64_t first_index, std::string data, bool is_last_substring );
 
-  // 返回 Reassembler 内部缓冲区中存储的字节数。
-  // 这个函数仅用于测试；不要为此功能添加额外的状态。
+  // 返回 Reassembler 内部缓冲区中存储的字节数，仅用于测试
   uint64_t count_bytes_pending() const;
 
-  // 返回输出流的 Reader 引用，用于读取重组后的字节流。
+  // 返回输出流的 Reader 引用，用于读取重组后的字节流
   Reader& reader() { return output_.reader(); }
   const Reader& reader() const { return output_.reader(); }
 
-  // 返回输出流的 Writer 引用，但只读（不能外部写入）。
+  // 返回输出流的 Writer 引用，但只读（不能外部写入）
   const Writer& writer() const { return output_.writer(); }
 
 private:
   ByteStream output_;                          // 用于存储重组后的字节流的 ByteStream
-  std::map<uint64_t, std::string> buf_ {};         // 缓存已接收的子串，按索引排序
+  std::map<uint64_t, std::string> buf_ {};      // 缓存已接收的子串，按索引排序
   uint64_t total_pending_ {};                  // 当前内部存储的字节总数
-  std::optional<uint64_t> end_index_ {};
+  std::optional<uint64_t> end_index_ {};       // 存储结束索引，用于标记最后一个字节
 
-  using mIterator = decltype( buf_ )::iterator;
-  mIterator split( uint64_t pos );
+  using mIterator = decltype( buf_ )::iterator; // 为 buf_ 中的迭代器类型定义别名
+  mIterator split( uint64_t pos );             // 辅助函数，用于根据索引拆分缓存
 };
