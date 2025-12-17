@@ -1,5 +1,4 @@
-#include "debug.hh"
-#include "socket.hh"
+#include "tcp_minnow_socket.hh"
 
 #include <cstdlib>
 #include <iostream>
@@ -12,19 +11,19 @@ using namespace std;
 namespace {
 void get_URL( const string& host, const string& path )
 {
-  TCPSocket sock {};
+  CS144TCPSocket sock {};
   sock.connect( Address( host, "http" ) );
 
   sock.write( string_view( "GET " + path + " HTTP/1.1\r\n" ) );
   sock.write( string_view( "Host: " + host + "\r\n" ) );
   sock.write( string_view( "Connection: close\r\n\r\n" ) );
 
-  string buffer;
   while ( not sock.eof() ) {
+    string buffer;
     sock.read( buffer );
     cout << buffer;
   }
-  sock.close();
+  sock.wait_until_closed();
 }
 } // namespace
 
