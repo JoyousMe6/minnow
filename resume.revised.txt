@@ -1,0 +1,6 @@
+基于 CS144 的 TCP 核心模块实现 | C++、CMake、CTest
+基于 Stanford CS144 课程框架，实现有界字节流、乱序重组、TCP 接收端与发送端，通过 checkpoint 3 对应测试。
+• 字节流缓冲：使用 std::queue<std::string> 存储数据块，通过 string_view 与读取偏移提供无拷贝窥视和分块消费，维护容量及读写计数；修复 string_view 生命周期相关的悬空视图问题。
+• 乱序重组：基于 std::map 按字节索引缓存片段，通过区间拆分和覆盖处理重复、重叠数据，裁剪接收范围外的数据，并将连续片段写入输出字节流。
+• TCP 接收端：实现 32 位 TCP 序列号与 64 位绝对序列号转换，处理 SYN、FIN、RST，生成累计确认号和接收窗口信息。
+• TCP 发送端：按对端通告窗口分段发送，维护未确认报文队列，实现 SYN/FIN 序列空间管理、零窗口探测、超时重传与 RTO 指数退避；使用课程测试及 AddressSanitizer、UndefinedBehaviorSanitizer 验证边界行为。

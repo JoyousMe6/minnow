@@ -1,0 +1,6 @@
+TCP/IP 协议栈——CS144
+本项目实现了一个简洁的TCP协议栈核心模块，涵盖了TCP发送端（Sender）、接收端（Receiver）、字节 流缓冲（ByteStream）以及乱序重组（Reassembler）等关键组件。 
+ByteStream：实现有容量限制的字节流缓冲区，支持高效的数据写入、读取与容量管理，作为TCP数据流 的基础。
+Reassembler：实现乱序、重叠TCP数据片段的重组，将其拼接为有序字节流，自动处理重叠、重复和容量 溢出等情况。
+TCPReceiver：实现TCP协议接收端逻辑，负责接收TCP分段、处理序列号、SYN/FIN/RST标志，并将数 据交给Reassembler重组，维护窗口和流状态。
+TCPSender：实现TCP协议发送端逻辑，负责将字节流分片为TCP段，管理发送窗口、未确认数据队列、 SYN/FIN控制、超时重传与指数回退等机制，确保数据可靠送达。
